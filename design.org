@@ -1,0 +1,51 @@
+#+TITLE: Design
+#+DESCRIPTION: Design document for the crypto-portfolio application
+
+* Portofolio
+** List<Crypto Currency>
+- AddTransaction(transaction) - void
+    appends the transaction to the transactions list.
+    If it's a deposit transaction
+        add to list of units
+        add to list of transactions
+    If it's a withdrawal
+        determine which unit to remove it from based on rule
+        add transaction to determined unit
+
+- GetCurrentAmount() - Float
+    Add all remaining amount in units together
+    return total amount
+
+- GetTaxesOwed(fiscalPeriod) - float
+    for each unit in units
+        for each transaction in history
+            if transaction.date in fiscalPeriod
+                amountSold = (unit.priceAtDate * transaction.amount) - (transaction.amount * transaction.priceAtDate)
+                timeHeld = unit.date - transaction.date
+                if(timeHeld < SHORT_TERM_GAINS_LENGTH)
+                    shortTermCapitalGain += amountSold
+                else
+                    longTermCapitalGain += amountSold
+    return longTermCapitalGain * longTermTaxRate + shortTermCapitalGain * shortTermTaxRate;
+
+*** List<Holding> holdings
+- addTransaction(transaction)
+    Add list to transaction.
+    subsctract from ammount
+    if ammount drops below 0 throw error
+**** Date
+**** amount
+**** priceAtDate
+**** List<Transaction> history
+***** Date
+***** Amount
+***** PriceAtDate
+***** Fee
+***** type
+*** List<Transaction> transactions
+**** Date
+**** Amount
+**** PriceAtDate
+**** Fee
+**** type
+*** SellRules
